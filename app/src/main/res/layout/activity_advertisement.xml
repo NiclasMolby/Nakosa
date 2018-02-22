@@ -7,8 +7,9 @@
     tools:context="dk.sdu.mmmi.nakosa.AdvertisementActivity">
 
 
-
-    <include layout="@layout/content_advertisement" />
+    <include
+        layout="@layout/content_advertisement"
+        tools:layout_editor_absoluteY="105dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
