@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 public class NewAdActivity extends AppCompatActivity {
 
+    private String picturePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +33,23 @@ public class NewAdActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Log.d("Camera", ""+imageBitmap.getWidth());
+            Log.d("Camera", "Width: "+imageBitmap.getWidth());
+            Log.d("Camera", "Height: " + imageBitmap.getHeight());
             ImageView image = findViewById(R.id.imageFromCamera);
             image.setImageBitmap(imageBitmap);
+            image.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d("OnStop", "Stopped");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("OnPause", "Paused");
+        super.onPause();
     }
 }
