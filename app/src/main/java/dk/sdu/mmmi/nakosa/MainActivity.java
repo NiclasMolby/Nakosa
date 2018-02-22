@@ -14,15 +14,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new AnnonceAdapter(this));
+        GridView gridview = findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageAdapter(this));
 
-        /*gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(HelloGridView.this, "" + position,
+                Toast.makeText(MainActivity.this, "" + position,
                         Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
     }
 }
