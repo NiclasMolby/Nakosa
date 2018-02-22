@@ -21,8 +21,8 @@ import java.util.Date;
 
 public class NewAdActivity extends AppCompatActivity {
 
-    private String picturePath;
     private final int CAMERA_CODE = 1;
+    private String picturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +56,6 @@ public class NewAdActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
-            /*Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Log.d("Camera", "Width: "+imageBitmap.getWidth());
-            Log.d("Camera", "Height: " + imageBitmap.getHeight());
-            ImageView image = findViewById(R.id.imageFromCamera);
-            image.setImageBitmap(imageBitmap);
-            image.setVisibility(View.VISIBLE);*/
             Log.d("Photo", "Photo taken - "+ picturePath);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             ImageView image = findViewById(R.id.imageFromCamera);
@@ -89,13 +82,12 @@ public class NewAdActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        Log.d("OnStop", "Stopped");
+        if(picturePath != null) {
+            File directoryToClean = new File(picturePath);
+            for(File child : directoryToClean.getParentFile().listFiles()) {
+                child.delete();
+            }
+        }
         super.onStop();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.d("OnPause", "Paused");
-        super.onPause();
     }
 }
