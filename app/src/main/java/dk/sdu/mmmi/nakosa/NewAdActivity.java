@@ -12,24 +12,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class NewAdActivity extends AppCompatActivity {
 
     private final int CAMERA_CODE = 1;
     private String picturePath;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ad);
 
-
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
     }
 
     public void useCamera(View view) {
@@ -78,6 +84,44 @@ public class NewAdActivity extends AppCompatActivity {
         // Save a file: path for use with ACTION_VIEW intents
         picturePath = image.getAbsolutePath();
         return image;
+    }
+
+    public void saveAdvertisementInDb(View view) {
+        if(validateFields()) {
+            databaseReference.push().setValue(getFieldsValue());
+            finish();
+        } else {
+            // Lav en toast eller lign.
+        }
+    }
+
+    private boolean validateFields() {
+        boolean noErrors = true;
+        EditText product = findViewById(R.id.productName);
+        EditText price = findViewById(R.id.price);
+        EditText description = findViewById(R.id.description);
+
+        if(product.getText().toString().equals("")) {
+            noErrors = false;
+        }
+
+        if(price.getText().toString().equals("")) {
+            noErrors = false;
+        }
+
+        return noErrors;
+    }
+
+    private HashMap<String, String> getFieldsValue() {
+        HashMap<String, String> databaseEntry = new HashMap<>();
+        EditText product = findViewById(R.id.productName);
+        EditText price = findViewById(R.id.price);
+        EditText description = findViewById(R.id.description);
+        databaseEntry.put("Product", product.getText().toString());
+        databaseEntry.put("Price", price.getText().toString());
+        databaseEntry.put("Description", description.getText().toString());
+
+        return databaseEntry;
     }
 
     @Override
