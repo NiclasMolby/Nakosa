@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -91,7 +92,7 @@ public class NewAdActivity extends AppCompatActivity {
             databaseReference.push().setValue(getFieldsValue());
             finish();
         } else {
-            // Lav en toast eller lign.
+            Toast.makeText(this, "Produkt navn og pris skal udfyldes!", Toast.LENGTH_SHORT).show();
         }
     }
 
