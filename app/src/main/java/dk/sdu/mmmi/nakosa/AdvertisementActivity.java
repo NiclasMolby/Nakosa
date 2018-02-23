@@ -2,20 +2,29 @@ package dk.sdu.mmmi.nakosa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,30 +33,40 @@ import java.util.Map;
 public class AdvertisementActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
-    private List<String> ads;
+    private StorageReference storageReference;
+    private List<Map<String, String>> ads;
+    private ImageAdapter adapter;
+    private ProgressBar initialLoadProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisement);
 
+        initialLoadProgressBar = findViewById(R.id.initialSpinner);
+
         ads = new ArrayList<>();
 
         GridView gridview = findViewById(R.id.gridview);
-        final ImageAdapter adapter = new ImageAdapter(this, ads);
+        adapter = new ImageAdapter(this, ads);
         gridview.setAdapter(adapter);
 
 
-
+        storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {};
+                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {
+                };
                 Map<String, String> product = dataSnapshot.getValue(genericTypeIndicator);
-                ads.add(product.get("Product"));
-                adapter.notifyDataSetChanged();
+                Map<String, String> entry = new HashMap<>();
+
+                entry.put("Product", product.get("Product"));
+                entry.put("Image", downloadImage(product.get("ImagePath")));
+
+                ads.add(entry);
             }
 
             @Override
@@ -87,6 +106,32 @@ public class AdvertisementActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private String downloadImage(String imageName) {
+        File localFile = null;
+        StorageReference imageRef = storageReference.child("images/" + imageName);
+
+        try {
+            localFile = File.createTempFile("images" + imageName, "jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imageRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        initialLoadProgressBar.setVisibility(View.GONE);
+                        adapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+            }
+        });
+        return localFile.getAbsolutePath();
     }
 
 }

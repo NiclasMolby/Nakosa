@@ -110,7 +110,7 @@ public class NewAdActivity extends AppCompatActivity {
     public void uploadImageToStorageAndSaveInDB(final HashMap<String, String> dbEntry) {
         File image = new File(picturePath);
         Uri file = Uri.fromFile(image);
-        String imageName = image.getName();
+        final String imageName = image.getName();
         StorageReference imageRef = storageReference.child("images/" + imageName);
 
         imageRef.putFile(file)
@@ -118,7 +118,8 @@ public class NewAdActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        dbEntry.put("ImagePath", downloadUrl.getPath());
+                        //dbEntry.put("ImagePath", downloadUrl.getPath());
+                        dbEntry.put("ImagePath", imageName);
                         saveInDB(dbEntry);
                     }
                 })
