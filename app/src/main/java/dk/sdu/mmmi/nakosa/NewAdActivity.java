@@ -3,14 +3,13 @@ package dk.sdu.mmmi.nakosa;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -31,24 +30,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import dk.sdu.mmmi.nakosa.util.NewAdvertisementUtil;
-
 public class NewAdActivity extends AppCompatActivity {
 
     private final int CAMERA_CODE = 1;
     private String picturePath;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    private NewAdvertisementUtil adUtil;
+    private View progress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ad);
 
+        progress = findViewById(R.id.progress_overlay);
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
-        adUtil = new NewAdvertisementUtil(storageReference);
     }
 
     public void useCamera(View view) {
@@ -75,7 +74,7 @@ public class NewAdActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
-            Log.d("Photo", "Photo taken - "+ picturePath);
+            Log.d("Photo", "Photo taken - " + picturePath);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             ImageView image = findViewById(R.id.imageFromCamera);
             image.setImageBitmap(bitmap);
@@ -99,29 +98,63 @@ public class NewAdActivity extends AppCompatActivity {
         return image;
     }
 
-    public void saveAdvertisementInDb(View view) {
-        if(validateFields()) {
-            HashMap<String, String> adEntry = getFieldsValue();
-            adEntry.put("ImagePath", adUtil.uploadImageToStorage(picturePath));
-            databaseReference.push().setValue(adEntry);
-            finish();
+    public void createNewAd(View view) {
+        if (validateFields()) {
+            progress.setVisibility(View.VISIBLE);
+            uploadImageToStorageAndSaveInDB(getFieldsValue());
         } else {
             Toast.makeText(this, "Produkt navn og pris skal udfyldes!", Toast.LENGTH_SHORT).show();
         }
     }
 
+    public void uploadImageToStorageAndSaveInDB(final HashMap<String, String> dbEntry) {
+        File image = new File(picturePath);
+        Uri file = Uri.fromFile(image);
+        String imageName = image.getName();
+        StorageReference imageRef = storageReference.child("images/" + imageName);
 
+        imageRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        dbEntry.put("ImagePath", downloadUrl.getPath());
+                        saveInDB(dbEntry);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        uploadError();
+                    }
+                });
+
+    }
+
+    private void saveInDB(HashMap<String, String> dbEntry) {
+        databaseReference.push().setValue(dbEntry);
+        finish();
+    }
+
+    private void uploadError() {
+        progress.setVisibility(View.GONE);
+        Toast.makeText(this, "Der skete en fejl, prøv igen.", Toast.LENGTH_SHORT).show();
+    }
 
     private boolean validateFields() {
         boolean noErrors = true;
         EditText product = findViewById(R.id.productName);
         EditText price = findViewById(R.id.price);
 
-        if(product.getText().toString().equals("")) {
+        if (product.getText().toString().equals("")) {
             noErrors = false;
         }
 
-        if(price.getText().toString().equals("")) {
+        if (price.getText().toString().equals("")) {
+            noErrors = false;
+        }
+
+        if (picturePath == null) {
             noErrors = false;
         }
 
@@ -142,9 +175,9 @@ public class NewAdActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if(picturePath != null) {
+        if (picturePath != null) {
             File directoryToClean = new File(picturePath);
-            for(File child : directoryToClean.getParentFile().listFiles()) {
+            for (File child : directoryToClean.getParentFile().listFiles()) {
                 child.delete();
             }
         }

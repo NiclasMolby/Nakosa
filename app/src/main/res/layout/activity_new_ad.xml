@@ -7,6 +7,7 @@
     android:background="@color/backgroundColor"
     tools:context="dk.sdu.mmmi.nakosa.NewAdActivity">
 
+    <include layout="@layout/include_progress_overlay"/>
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -42,7 +43,7 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Produkt"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences|textPersonName"
         android:textColor="@color/addTextColor"
         android:textColorHint="@color/inputTextHintColor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,7 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:hint="Produkt beskrivelse"
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences|textMultiLine"
         android:maxLines="4"
         android:textColor="@color/addTextColor"
         android:textColorHint="@color/inputTextHintColor"
@@ -102,8 +103,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/colorAccent"
-        android:onClick="saveAdvertisementInDb"
-        android:text="Tilføj Annonce"
+        android:onClick="createNewAd"
+        android:text="Opret annonce"
         android:textColor="@color/backgroundColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addPicture" />
