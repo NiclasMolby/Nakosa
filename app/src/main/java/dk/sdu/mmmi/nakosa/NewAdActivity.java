@@ -7,6 +7,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +31,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import dk.sdu.mmmi.nakosa.util.NewAdvertisementUtil;
+
 public class NewAdActivity extends AppCompatActivity {
 
     private final int CAMERA_CODE = 1;
     private String picturePath;
     private DatabaseReference databaseReference;
+    private StorageReference storageReference;
+    private NewAdvertisementUtil adUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,8 @@ public class NewAdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_ad);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
+        storageReference = FirebaseStorage.getInstance().getReference();
+        adUtil = new NewAdvertisementUtil(storageReference);
     }
 
     public void useCamera(View view) {
@@ -89,18 +101,21 @@ public class NewAdActivity extends AppCompatActivity {
 
     public void saveAdvertisementInDb(View view) {
         if(validateFields()) {
-            databaseReference.push().setValue(getFieldsValue());
+            HashMap<String, String> adEntry = getFieldsValue();
+            adEntry.put("ImagePath", adUtil.uploadImageToStorage(picturePath));
+            databaseReference.push().setValue(adEntry);
             finish();
         } else {
             Toast.makeText(this, "Produkt navn og pris skal udfyldes!", Toast.LENGTH_SHORT).show();
         }
     }
 
+
+
     private boolean validateFields() {
         boolean noErrors = true;
         EditText product = findViewById(R.id.productName);
         EditText price = findViewById(R.id.price);
-        EditText description = findViewById(R.id.description);
 
         if(product.getText().toString().equals("")) {
             noErrors = false;
