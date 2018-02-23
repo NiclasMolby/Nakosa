@@ -53,7 +53,8 @@ public class ImageAdapter extends BaseAdapter {
 
         ImageView img = newView.findViewById(R.id.imageView);
         img.setClipToOutline(true);
-        img.setImageBitmap(bitmap);
+        img.setImageResource(R.drawable.sample);
+        //img.setImageBitmap(bitmap);
 
         TextView text = newView.findViewById(R.id.textView);
         text.setText(productText);
