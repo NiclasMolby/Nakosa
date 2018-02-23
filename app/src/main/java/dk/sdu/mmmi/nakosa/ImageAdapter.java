@@ -6,19 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 
 public class ImageAdapter extends BaseAdapter {
 
     private Context context;
+    private List<String> ads;
 
-    public ImageAdapter(Context mainActivity) {
+    public ImageAdapter(Context mainActivity, List<String> ads) {
         this.context = mainActivity;
+        this.ads = ads;
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return ads.size();
     }
 
     @Override
@@ -39,8 +46,9 @@ public class ImageAdapter extends BaseAdapter {
         View newView;
         newView = inflater.inflate(R.layout.grid_item, null);
         ImageView img = newView.findViewById(R.id.imageView);
+        TextView text = newView.findViewById(R.id.textView);
         img.setClipToOutline(true);
-        newView.findViewById(R.id.textView);
+        text.setText(ads.get(i));
         return newView;
     }
 
