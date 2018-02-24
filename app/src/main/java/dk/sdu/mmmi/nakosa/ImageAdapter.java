@@ -3,11 +3,13 @@ package dk.sdu.mmmi.nakosa;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -19,9 +21,9 @@ import java.util.Map;
 public class ImageAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Map<String, String>> ads;
+    private List<Map<String, Object>> ads;
 
-    public ImageAdapter(Context mainActivity, List<Map<String, String>> ads) {
+    public ImageAdapter(Context mainActivity, List<Map<String, Object>> ads) {
         this.context = mainActivity;
         this.ads = ads;
     }
@@ -43,18 +45,21 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        Log.d("View", "Get View");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String productText = ads.get(i).get("Product");
-        Bitmap bitmap = BitmapFactory.decodeFile(ads.get(i).get("Image"));
+        String productText = (String) ads.get(i).get("Product");
+        //Bitmap bitmap = BitmapFactory.decodeFile(ads.get(i).get("Image"));
 
 
         View newView;
         newView = inflater.inflate(R.layout.grid_item, null);
 
         ImageView img = newView.findViewById(R.id.imageView);
+        ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
         img.setClipToOutline(true);
-        img.setImageResource(R.drawable.sample);
-        //img.setImageBitmap(bitmap);
+        //img.setImageResource(R.drawable.sample);
+        progressBar.setVisibility(View.INVISIBLE);
+        img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
 
         TextView text = newView.findViewById(R.id.textView);
         text.setText(productText);

@@ -1,10 +1,13 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -34,7 +37,7 @@ public class AdvertisementActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    private List<Map<String, String>> ads;
+    private List<Map<String, Object>> ads;
     private ImageAdapter adapter;
     private ProgressBar initialLoadProgressBar;
 
@@ -61,10 +64,12 @@ public class AdvertisementActivity extends AppCompatActivity {
                 GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {
                 };
                 Map<String, String> product = dataSnapshot.getValue(genericTypeIndicator);
-                Map<String, String> entry = new HashMap<>();
+                Map<String, Object> entry = new HashMap<>();
 
+                entry.put("Key", dataSnapshot.getKey());
                 entry.put("Product", product.get("Product"));
-                entry.put("Image", downloadImage(product.get("ImagePath")));
+                entry.put("Image", null);
+                downloadImage(dataSnapshot.getKey(), product.get("ImagePath"));
 
                 ads.add(entry);
             }
@@ -108,7 +113,8 @@ public class AdvertisementActivity extends AppCompatActivity {
         });
     }
 
-    private String downloadImage(String imageName) {
+    private String downloadImage(final String ID, final String imageName) {
+        Log.d("Download", "Download image " + imageName + " from firebase storage");
         File localFile = null;
         StorageReference imageRef = storageReference.child("images/" + imageName);
 
@@ -117,11 +123,13 @@ public class AdvertisementActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        final File finalLocalFile = localFile;
         imageRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         initialLoadProgressBar.setVisibility(View.GONE);
+                        generateBitmapAndUpdateMap(ID, finalLocalFile.getAbsolutePath());
                         adapter.notifyDataSetChanged();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -134,4 +142,13 @@ public class AdvertisementActivity extends AppCompatActivity {
         return localFile.getAbsolutePath();
     }
 
+    private void generateBitmapAndUpdateMap(String id, String imagePath) {
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        for(Map<String, Object> ad: ads) {
+            if(ad.get("Key").equals(id)) {
+                ad.put("Image", bitmap);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
 }

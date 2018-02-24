@@ -25,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class NewAdActivity extends AppCompatActivity {
 
     private final int CAMERA_CODE = 1;
     private String picturePath;
+    private String compressedPath;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private View progress;
@@ -76,9 +78,44 @@ public class NewAdActivity extends AppCompatActivity {
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
             Log.d("Photo", "Photo taken - " + picturePath);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            double ratio = ((double) bitmap.getHeight()) / ((double) bitmap.getWidth());
+            int targetWidth = 400;
+            int targetHeight = (int) (targetWidth * ratio);
+            Log.d("Source image", "Source height: " + bitmap.getHeight());
+            Log.d("Source image", "Source width: " + bitmap.getWidth());
+            Log.d("Ratio", "Ratio: " + ratio);
+            Log.d("Target image", "Target Height: "+targetHeight);
+            Log.d("Target image", "Target width: " + targetWidth);
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, false);
+            Log.d("Source image", "Source size: " + bitmap.getAllocationByteCount());
+            Log.d("Source image", "Target size: " + scaled.getByteCount());
+
+            writeCompressedImage(scaled);
             ImageView image = findViewById(R.id.imageFromCamera);
-            image.setImageBitmap(bitmap);
+
+            image.setImageBitmap(scaled);
             image.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void writeCompressedImage(Bitmap bitmap) {
+        FileOutputStream out = null;
+        String compressedPath = picturePath.substring(0, picturePath.length()-4) + "_compressed.jpg";
+        File file = new File(compressedPath);
+        try {
+            out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            this.compressedPath = compressedPath;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -108,7 +145,7 @@ public class NewAdActivity extends AppCompatActivity {
     }
 
     public void uploadImageToStorageAndSaveInDB(final HashMap<String, String> dbEntry) {
-        File image = new File(picturePath);
+        File image = new File(compressedPath);
         Uri file = Uri.fromFile(image);
         final String imageName = image.getName();
         StorageReference imageRef = storageReference.child("images/" + imageName);
