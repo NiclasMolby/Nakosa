@@ -45,11 +45,8 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.d("View", "Get View");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         String productText = (String) ads.get(i).get("Product");
-        //Bitmap bitmap = BitmapFactory.decodeFile(ads.get(i).get("Image"));
-
 
         View newView;
         newView = inflater.inflate(R.layout.grid_item, null);
@@ -57,8 +54,10 @@ public class ImageAdapter extends BaseAdapter {
         ImageView img = newView.findViewById(R.id.imageView);
         ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
         img.setClipToOutline(true);
-        //img.setImageResource(R.drawable.sample);
-        progressBar.setVisibility(View.INVISIBLE);
+
+        if (ads.get(i).get("Image") != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
         img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
 
         TextView text = newView.findViewById(R.id.textView);
