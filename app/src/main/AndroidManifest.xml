@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dk.sdu.mmmi.nakosa">
 
-    <uses-feature android:name="android.hardware.camera2" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,33 +29,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.android.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
-        </provider>
-
-        <activity android:name=".NewAdActivity"
-            android:configChanges="orientation">
-        </activity>
-        <activity
-            android:name=".AdvertisementActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
