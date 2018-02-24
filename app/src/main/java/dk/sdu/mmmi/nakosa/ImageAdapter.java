@@ -45,24 +45,47 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        String productText = (String) ads.get(i).get("Product");
 
         View newView;
-        newView = inflater.inflate(R.layout.grid_item, null);
+        if(view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        ImageView img = newView.findViewById(R.id.imageView);
-        ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
-        img.setClipToOutline(true);
+            newView = inflater.inflate(R.layout.grid_item, null);
 
-        if (ads.get(i).get("Image") != null) {
-            progressBar.setVisibility(View.INVISIBLE);
+            ImageView img = newView.findViewById(R.id.imageView);
+            TextView text = newView.findViewById(R.id.textView);
+            ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
+
+            img.setClipToOutline(true);
+
+            /*if (ads.get(i).get("Image") != null) {
+                progressBar.setVisibility(View.INVISIBLE);
+            }*/
+
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.text = text;
+            viewHolder.image = img;
+            viewHolder.progressBar = progressBar;
+            newView.setTag(viewHolder);
+
+        } else {
+            newView = view;
+            ViewHolder viewHolder = (ViewHolder) newView.getTag();
+            viewHolder.text.setText((String) ads.get(i).get("Product"));
+            viewHolder.image.setImageBitmap((Bitmap) ads.get(i).get("Image"));
+
+            if (ads.get(i).get("Image") != null) {
+                viewHolder.progressBar.setVisibility(View.INVISIBLE);
+            }
         }
-        img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
 
-        TextView text = newView.findViewById(R.id.textView);
-        text.setText(productText);
         return newView;
+    }
+
+    private static class ViewHolder {
+        TextView text;
+        ImageView image;
+        ProgressBar progressBar;
     }
 
 }
