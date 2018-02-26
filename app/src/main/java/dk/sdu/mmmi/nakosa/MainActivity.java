@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         setFacebookData(loginResult);
+                        changeScreen();
                     }
 
                     @Override
@@ -58,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
                         ((TextView) findViewById(R.id.textView)).setText("Logged in fejlede :(");
                     }
                 });
+    }
+
+    private void changeScreen() {
+        Intent intent = new Intent(this, AdvertisementActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -95,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("Login" + "Gender", gender);
 
                             ((TextView) findViewById(R.id.textView)).setText("Profil som loggede ind:" + firstName + " " + lastName);
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
