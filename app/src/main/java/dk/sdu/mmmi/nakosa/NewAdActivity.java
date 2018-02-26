@@ -192,7 +192,7 @@ public class NewAdActivity extends AppCompatActivity {
             noErrors = false;
         }
 
-        if (picturePath == null) {
+        if (compressedPath == null) {
             noErrors = false;
         }
 
