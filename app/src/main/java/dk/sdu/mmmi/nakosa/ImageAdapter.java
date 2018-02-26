@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +46,8 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
         View newView;
-        if(view == null) {
+        //if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             newView = inflater.inflate(R.layout.grid_item, null);
@@ -58,11 +58,13 @@ public class ImageAdapter extends BaseAdapter {
 
             img.setClipToOutline(true);
 
-            /*if (ads.get(i).get("Image") != null) {
+            if (ads.get(i).get("Image") != null) {
                 progressBar.setVisibility(View.INVISIBLE);
-            }*/
+            }
 
-            ViewHolder viewHolder = new ViewHolder();
+            text.setText((String) ads.get(i).get("Product"));
+            img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
+            /*ViewHolder viewHolder = new ViewHolder();
             viewHolder.text = text;
             viewHolder.image = img;
             viewHolder.progressBar = progressBar;
@@ -77,7 +79,7 @@ public class ImageAdapter extends BaseAdapter {
             if (ads.get(i).get("Image") != null) {
                 viewHolder.progressBar.setVisibility(View.INVISIBLE);
             }
-        }
+        }*/
 
         return newView;
     }
