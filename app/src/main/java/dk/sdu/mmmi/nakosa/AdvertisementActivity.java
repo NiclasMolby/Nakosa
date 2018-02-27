@@ -42,14 +42,15 @@ public class AdvertisementActivity extends AppCompatActivity {
     private List<Map<String, Object>> ads;
     private ImageAdapter adapter;
     private ProgressBar initialLoadProgressBar;
+    private User loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisement);
 
-        User user = (User) getIntent().getSerializableExtra("userObject");
-        ((TextView) findViewById(R.id.textView4)).setText("Welcome " + user.getFirstName());
+        loggedInUser = (User) getIntent().getSerializableExtra("userObject");
+        ((TextView) findViewById(R.id.textView4)).setText("Welcome " + loggedInUser.getFirstName());
 
         initialLoadProgressBar = findViewById(R.id.initialSpinner);
 
@@ -113,6 +114,7 @@ public class AdvertisementActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), NewAdActivity.class);
+                intent.putExtra("User", loggedInUser);
                 startActivity(intent);
             }
         });

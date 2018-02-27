@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +40,7 @@ public class NewAdActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private View progress;
+    private User loggedInUser;
 
 
     @Override
@@ -46,7 +48,11 @@ public class NewAdActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ad);
 
+        loggedInUser = (User) getIntent().getSerializableExtra("User");
+
         progress = findViewById(R.id.progress_overlay);
+
+        ((TextView) findViewById(R.id.name)).setText(loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
