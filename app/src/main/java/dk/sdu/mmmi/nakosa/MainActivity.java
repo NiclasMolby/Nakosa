@@ -1,30 +1,24 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        checkLoginStatus();
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
         callbackManager = CallbackManager.Factory.create();
-
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -59,6 +55,21 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void checkLoginStatus() {
+        if(AccessToken.getCurrentAccessToken() != null){
+            user = new User(
+                    Profile.getCurrentProfile().getFirstName(),
+                    Profile.getCurrentProfile().getLastName());
+            changeView();
+        }
+    }
+
+    private void changeView() {
+        Intent intent = new Intent(MainActivity.this, AdvertisementActivity.class);
+        intent.putExtra("userObject", user);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -67,22 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void setFacebookData(final LoginResult loginResult)
     {
-        GraphRequest request = GraphRequest.newMeRequest(
-                loginResult.getAccessToken(),
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        // Application code
                         try {
-                            String firstName = response.getJSONObject().getString("first_name");
-                            String lastName = response.getJSONObject().getString("last_name");
-                            String gender = response.getJSONObject().getString("gender");
-
-                            user = new User(firstName, lastName, gender);
-
-                            Intent intent = new Intent(MainActivity.this, AdvertisementActivity.class);
-                            intent.putExtra("userObject", user);
-                            startActivity(intent);
+                            user = new User(
+                                    response.getJSONObject().getString("first_name"),
+                                    response.getJSONObject().getString("last_name"));
+                            changeView();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
