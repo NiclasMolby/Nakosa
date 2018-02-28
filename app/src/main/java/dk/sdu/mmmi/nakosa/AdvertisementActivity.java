@@ -30,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +73,10 @@ public class AdvertisementActivity extends AppCompatActivity {
 
                 entry.put("Key", dataSnapshot.getKey());
                 entry.put("Product", product.get("Product"));
+                entry.put("Description", product.get("Description"));
+                entry.put("Price", product.get("Price"));
+                //entry.put("Seller", product.get("Seller"));
+                entry.put("ImagePath", product.get("ImagePath"));
                 entry.put("Image", null);
                 downloadImage(dataSnapshot.getKey(), product.get("ImagePath"));
 
@@ -104,8 +107,9 @@ public class AdvertisementActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(AdvertisementActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(), ViewAdvertisementActivity.class);
+                intent.putExtra("Advertisement", createAdvertisementData(position));
+                startActivity(intent);
             }
         });
 
@@ -156,5 +160,16 @@ public class AdvertisementActivity extends AppCompatActivity {
             }
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private AdvertisementData createAdvertisementData(int position) {
+        AdvertisementData data = new AdvertisementData();
+        data.setProductName((String) ads.get(position).get("Product"));
+        data.setSeller("Antjon");
+        data.setDescription((String) ads.get(position).get("Description"));
+        data.setImagePath((String) ads.get(position).get("ImagePath"));
+        data.setPrice((String) ads.get(position).get("Price"));
+
+        return data;
     }
 }

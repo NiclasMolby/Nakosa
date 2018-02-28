@@ -52,8 +52,6 @@ public class NewAdActivity extends AppCompatActivity {
 
         progress = findViewById(R.id.progress_overlay);
 
-        ((TextView) findViewById(R.id.name)).setText(loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
     }
@@ -210,9 +208,10 @@ public class NewAdActivity extends AppCompatActivity {
         EditText product = findViewById(R.id.productName);
         EditText price = findViewById(R.id.price);
         EditText description = findViewById(R.id.description);
+        databaseEntry.put("Seller", loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
         databaseEntry.put("Product", product.getText().toString());
         databaseEntry.put("Price", price.getText().toString());
-        databaseEntry.put("Description", description.getText().toString());
+        databaseEntry.put("Description", description.getText().toString().trim());
 
         return databaseEntry;
     }
