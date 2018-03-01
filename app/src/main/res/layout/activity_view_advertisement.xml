@@ -143,10 +143,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
-
-
-
-
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
@@ -161,7 +157,6 @@
         android:background="@color/colorPrimaryBorder"
         app:itemIconTint="@color/drawer_item"
         app:itemTextColor="@color/drawer_item"
-        app:layout_anchor="@+id/include"
         app:layout_anchorGravity="bottom|center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/my_navigation_items" />
