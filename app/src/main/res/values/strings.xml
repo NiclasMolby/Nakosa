@@ -6,4 +6,14 @@
     <string name="menu_account">My Account</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_home">Home Feed</string>
+    <string name="in_app_title">Nakosa</string>
+    <string name="view_ad_seller">Sælger:</string>
+    <string name="view_ad_price">Pris:</string>
+    <string name="view_ad_description">Beskrivelse:</string>
+    <string name="new_ad_product">Produkt</string>
+    <string name="new_ad_price">Pris</string>
+    <string name="new_ad_description">Produkt beskrivelse</string>
+    <string name="new_ad_add_image">Tilføj billede</string>
+    <string name="new_ad_create">Opret annonce</string>
+    <string name="uploading_overlay">Uploading annonce...</string>
 </resources>

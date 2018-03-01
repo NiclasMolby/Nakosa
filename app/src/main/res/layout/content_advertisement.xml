@@ -32,7 +32,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/advent_pro"
-        android:text="Nakosa"
+        android:text="@string/in_app_title"
         android:textColor="@color/colorAccent"
         android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"

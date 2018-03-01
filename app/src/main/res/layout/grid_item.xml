@@ -32,7 +32,7 @@
         android:layout_below="@+id/imageView"
         android:lineSpacingExtra="24sp"
         android:padding="10dp"
-        android:text="This is Just Dummy Text"
+        android:text=""
         android:textAlignment="center"
         android:textColor="@color/addTextColor"
         android:textSize="14sp"

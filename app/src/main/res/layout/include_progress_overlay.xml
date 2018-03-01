@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="18sp"
-        android:text="Uploading annonce..."
+        android:text="@string/uploading_overlay"
         android:textColor="#fff"
         android:layout_marginTop="50dp"/>
 

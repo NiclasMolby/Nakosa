@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
-                android:text="Sælger: "
+                android:text="@string/view_ad_seller"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/price" />
 
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
-                android:text="Pris: "
+                android:text="@string/view_ad_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/productName" />
 
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text=""
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
-                android:text="Beskrivelse:"
+                android:text="@string/view_ad_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/seller" />
 
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text=""
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text=""
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -92,7 +92,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/advent_pro"
-                android:text="Nakosa"
+                android:text="@string/in_app_title"
                 android:textColor="@color/colorAccent"
                 android:textSize="50sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="30dp"
-                android:text="Produkt"
+                android:text=""
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
