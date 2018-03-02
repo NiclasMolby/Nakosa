@@ -16,4 +16,5 @@
     <string name="new_ad_add_image">Tilføj billede</string>
     <string name="new_ad_create">Opret annonce</string>
     <string name="uploading_overlay">Uploading annonce...</string>
+    <string name="welcome_text">Velkommen</string>
 </resources>

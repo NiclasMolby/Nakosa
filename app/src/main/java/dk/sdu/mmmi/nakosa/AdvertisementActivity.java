@@ -49,7 +49,7 @@ public class AdvertisementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_advertisement);
 
         loggedInUser = (User) getIntent().getSerializableExtra("userObject");
-        ((TextView) findViewById(R.id.textView4)).setText("Welcome " + loggedInUser.getFirstName());
+        ((TextView) findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + loggedInUser.getFirstName());
 
         initialLoadProgressBar = findViewById(R.id.initialSpinner);
 
