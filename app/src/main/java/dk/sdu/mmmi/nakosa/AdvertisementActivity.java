@@ -117,7 +117,7 @@ public class AdvertisementActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), NewAdActivity.class);
+                Intent intent = new Intent(getBaseContext(), ScrollingActivity.class);
                 intent.putExtra("User", loggedInUser);
                 startActivity(intent);
             }
