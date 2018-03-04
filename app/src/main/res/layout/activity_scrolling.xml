@@ -10,7 +10,9 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="59dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
@@ -20,22 +22,23 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/in_app_title"/>
-            <EditText
-                android:id="@+id/editText"
+                android:text="@string/in_app_title" />
+
+            <TextView
+                android:id="@+id/search_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:layout_marginStart="30dp"
+                android:width="200dp"
+                android:background="@drawable/search_box"
+                android:onClick="search"
+                android:text="Search..." />
 
         </android.support.v7.widget.Toolbar>
-
 
 
     </android.support.design.widget.AppBarLayout>
