@@ -38,6 +38,7 @@
                 android:layout_marginStart="30dp"
                 android:width="200dp"
                 android:background="@drawable/search_box"
+                android:drawableStart="?android:attr/actionModeWebSearchDrawable"
                 android:hint="Search..."
                 android:singleLine="true"
                 android:textColor="@color/addTextColor"

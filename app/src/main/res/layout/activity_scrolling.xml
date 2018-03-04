@@ -28,15 +28,21 @@
                 android:layout_height="wrap_content"
                 android:text="@string/in_app_title" />
 
-            <TextView
+            <EditText
                 android:id="@+id/search_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:width="200dp"
                 android:background="@drawable/search_box"
-                android:onClick="search"
-                android:text="Search..." />
+                android:drawableStart="?android:attr/actionModeWebSearchDrawable"
+                android:hint="Search..."
+                android:singleLine="true"
+                android:textColor="@color/addTextColor"
+                android:textSize="14sp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:onClick="search"/>
 
         </android.support.v7.widget.Toolbar>
 
