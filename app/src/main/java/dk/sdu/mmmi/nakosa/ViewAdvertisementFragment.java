@@ -1,13 +1,15 @@
 package dk.sdu.mmmi.nakosa;
 
-import android.content.Intent;
+import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,9 +21,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
-public class ViewAdvertisementActivity extends AppCompatActivity {
+public class ViewAdvertisementFragment extends Fragment {
 
     private StorageReference storageReference;
 
@@ -30,21 +31,22 @@ public class ViewAdvertisementActivity extends AppCompatActivity {
     private TextView seller;
     private TextView description;
     private ImageView image;
+    private View v;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_advertisement);
+        v = inflater.inflate(R.layout.fragment_view_advertisement, container, false);
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        productName = findViewById(R.id.productName);
-        price = findViewById(R.id.price);
-        seller = findViewById(R.id.seller);
-        description = findViewById(R.id.description);
-        image = findViewById(R.id.image);
+        productName = v.findViewById(R.id.productName);
+        price = v.findViewById(R.id.price);
+        seller = v.findViewById(R.id.seller);
+        description = v.findViewById(R.id.description);
+        image = v.findViewById(R.id.image);
 
-        AdvertisementData data = (AdvertisementData) getIntent().getSerializableExtra("Advertisement");
+        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("product");
 
         productName.setText(data.getProductName());
         price.setText(data.getPrice());
@@ -52,6 +54,8 @@ public class ViewAdvertisementActivity extends AppCompatActivity {
         description.setText(data.getDescription());
 
         downloadImage(data.getImagePath());
+
+        return v;
     }
 
     private void downloadImage(final String imageName) {
@@ -83,6 +87,6 @@ public class ViewAdvertisementActivity extends AppCompatActivity {
     private void generateBitmapAndUpdateImage(String imagePath) {
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         image.setImageBitmap(bitmap);
-        findViewById(R.id.viewAdImageProgress).setVisibility(View.GONE);
+        v.findViewById(R.id.viewAdImageProgress).setVisibility(View.GONE);
     }
 }

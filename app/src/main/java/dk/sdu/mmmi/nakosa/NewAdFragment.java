@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.nakosa;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,13 +9,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,7 +35,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class NewAdActivity extends AppCompatActivity {
+import static android.app.Activity.RESULT_OK;
+
+public class NewAdFragment extends Fragment {
 
     private final int CAMERA_CODE = 1;
     private String picturePath;
@@ -41,44 +46,43 @@ public class NewAdActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private View progress;
     private User loggedInUser;
+    private View v;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_ad);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.fragment_new_ad, container, false);
+        Log.d("New Ad", "Created new ad");
 
-        loggedInUser = (User) getIntent().getSerializableExtra("User");
-
-        progress = findViewById(R.id.progress_overlay);
+        loggedInUser = (User) getArguments().getSerializable("userObject");
+        progress = v.findViewById(R.id.progress_overlay);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
+
+        return v;
     }
 
+    /*
     public void useCamera(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
+            photoFile = null;//createImageFile();
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, CAMERA_CODE);
             }
         }
-    }
+    }*/
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
             Log.d("Photo", "Photo taken - " + picturePath);
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
@@ -95,7 +99,7 @@ public class NewAdActivity extends AppCompatActivity {
             Log.d("Source image", "Target size: " + scaled.getByteCount());
 
             writeCompressedImage(scaled);
-            ImageView image = findViewById(R.id.imageFromCamera);
+            ImageView image = v.findViewById(R.id.imageFromCamera);
 
             image.setImageBitmap(scaled);
             image.setVisibility(View.VISIBLE);
@@ -123,28 +127,30 @@ public class NewAdActivity extends AppCompatActivity {
         }
     }
 
+    /*
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
         // Save a file: path for use with ACTION_VIEW intents
         picturePath = image.getAbsolutePath();
         return image;
     }
+    */
 
     public void createNewAd(View view) {
         if (validateFields()) {
             progress.setVisibility(View.VISIBLE);
             uploadImageToStorageAndSaveInDB(getFieldsValue());
         } else {
-            Toast.makeText(this, "Produkt navn og pris skal udfyldes!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Produkt navn og pris skal udfyldes!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -175,18 +181,18 @@ public class NewAdActivity extends AppCompatActivity {
 
     private void saveInDB(HashMap<String, String> dbEntry) {
         databaseReference.push().setValue(dbEntry);
-        finish();
+        //finish();
     }
 
     private void uploadError() {
         progress.setVisibility(View.GONE);
-        Toast.makeText(this, "Der skete en fejl, prøv igen.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Der skete en fejl, prøv igen.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateFields() {
         boolean noErrors = true;
-        EditText product = findViewById(R.id.productName);
-        EditText price = findViewById(R.id.price);
+        EditText product = v.findViewById(R.id.productName);
+        EditText price = v.findViewById(R.id.price);
 
         if (product.getText().toString().equals("")) {
             noErrors = false;
@@ -205,9 +211,9 @@ public class NewAdActivity extends AppCompatActivity {
 
     private HashMap<String, String> getFieldsValue() {
         HashMap<String, String> databaseEntry = new HashMap<>();
-        EditText product = findViewById(R.id.productName);
-        EditText price = findViewById(R.id.price);
-        EditText description = findViewById(R.id.description);
+        EditText product = v.findViewById(R.id.productName);
+        EditText price = v.findViewById(R.id.price);
+        EditText description = v.findViewById(R.id.description);
         databaseEntry.put("Seller", loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
         databaseEntry.put("Product", product.getText().toString());
         databaseEntry.put("Price", price.getText().toString());
@@ -217,7 +223,7 @@ public class NewAdActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         if (picturePath != null) {
             File directoryToClean = new File(picturePath);
             for (File child : directoryToClean.getParentFile().listFiles()) {

@@ -5,16 +5,16 @@
     android:id="@+id/rootLayoutView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dk.sdu.mmmi.nakosa.ViewAdvertisementActivity">
+    android:background="#fff">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -121,6 +121,7 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/price"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
             <ProgressBar
                 android:id="@+id/viewAdImageProgress"
                 style="?android:attr/progressBarStyle"
@@ -149,16 +150,4 @@
     </ScrollView>
 
 
-    <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="start"
-        android:background="@color/colorPrimaryBorder"
-        app:itemIconTint="@color/drawer_item"
-        app:itemTextColor="@color/drawer_item"
-        app:layout_anchorGravity="bottom|center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/my_navigation_items" />
 </android.support.constraint.ConstraintLayout>

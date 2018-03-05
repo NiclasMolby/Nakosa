@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,11 +48,12 @@ public class AdvertisementFragment extends Fragment {
     private ImageAdapter adapter;
     private ProgressBar initialLoadProgressBar;
     private User loggedInUser;
+    private View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_advertisement, container, false);
+        v = inflater.inflate(R.layout.fragment_advertisement, container, false);
         if(getArguments() != null){
             loggedInUser = (User) getArguments().getSerializable("userObject");
             ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + loggedInUser.getFirstName());
@@ -113,11 +115,12 @@ public class AdvertisementFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                /*
-                Intent intent = new Intent(getBaseContext(), ViewAdvertisementActivity.class);
-                intent.putExtra("Advertisement", createAdvertisementData(position));
-                startActivity(intent);
-                */
+                ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product",createAdvertisementData(position));
+                fragment.setArguments(bundle);
+                Fragment x = getFragmentManager().findFragmentByTag("ANTON");
+                getFragmentManager().beginTransaction().remove(x).add(R.id.fragment, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -125,11 +128,12 @@ public class AdvertisementFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                Intent intent = new Intent(getBaseContext(), NewAdActivity.class);
-                intent.putExtra("User", loggedInUser);
-                startActivity(intent);
-                */
+                NewAdFragment fragment = new NewAdFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("userObject", loggedInUser);
+                fragment.setArguments(bundle);
+                (v.findViewById(R.id.fab)).setVisibility(View.GONE);
+                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
             }
         });
 

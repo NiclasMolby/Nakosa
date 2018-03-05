@@ -49,8 +49,12 @@ public class AdvertisementActivity extends AppCompatActivity {
 
         AdvertisementFragment fragment = new AdvertisementFragment();
         fragment.setArguments(getIntent().getExtras());
-        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "ANTON").commit();
 
         setContentView(R.layout.activity_advertisement);
+    }
+
+    public void changeToView(View view) {
+
     }
 }
