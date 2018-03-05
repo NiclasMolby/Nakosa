@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="dk.sdu.mmmi.nakosa.AdvertisementActivity"
-    tools:showIn="@layout/activity_advertisement">
+    tools:context="dk.sdu.mmmi.nakosa.FrontActivity"
+    tools:showIn="@layout/activity_front">
 
     <ProgressBar
         android:id="@+id/initialSpinner"

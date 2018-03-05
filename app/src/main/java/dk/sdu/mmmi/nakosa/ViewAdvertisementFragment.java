@@ -46,7 +46,7 @@ public class ViewAdvertisementFragment extends Fragment {
         description = v.findViewById(R.id.description);
         image = v.findViewById(R.id.image);
 
-        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("product");
+        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("ProductData");
 
         productName.setText(data.getProductName());
         price.setText(data.getPrice());

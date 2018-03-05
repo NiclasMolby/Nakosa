@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dk.sdu.mmmi.nakosa.AdvertisementActivity">
+    tools:context="dk.sdu.mmmi.nakosa.FrontActivity">
 
-    <fragment android:name="dk.sdu.mmmi.nakosa.AdvertisementFragment"
+    <FrameLayout
         android:id="@+id/fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

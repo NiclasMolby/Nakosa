@@ -40,7 +40,7 @@ import java.util.Map;
  * Created by Antonio on 05-03-2018.
  */
 
-public class AdvertisementFragment extends Fragment {
+public class AdvertisementsFragment extends Fragment {
 
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
@@ -76,17 +76,18 @@ public class AdvertisementFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {
                 };
-                Map<String, String> product = dataSnapshot.getValue(genericTypeIndicator);
+                DatabaseAdvertisement databaseAdvertisement = dataSnapshot.getValue(DatabaseAdvertisement.class);
+                //Map<String, String> product = dataSnapshot.getValue(genericTypeIndicator);
                 Map<String, Object> entry = new HashMap<>();
 
                 entry.put("Key", dataSnapshot.getKey());
-                entry.put("Product", product.get("Product"));
-                entry.put("Description", product.get("Description"));
-                entry.put("Price", product.get("Price"));
-                //entry.put("Seller", product.get("Seller"));
-                entry.put("ImagePath", product.get("ImagePath"));
+                entry.put("Product", databaseAdvertisement.Product);
+                entry.put("Description", databaseAdvertisement.Description);
+                entry.put("Price", databaseAdvertisement.Price);
+                //entry.put("Seller", databaseAdvertisement.getSeller());
+                entry.put("ImagePath", databaseAdvertisement.ImagePath);
                 entry.put("Image", null);
-                downloadImage(dataSnapshot.getKey(), product.get("ImagePath"));
+                downloadImage(dataSnapshot.getKey(), databaseAdvertisement.ImagePath);
 
                 ads.add(entry);
             }
@@ -117,10 +118,9 @@ public class AdvertisementFragment extends Fragment {
                                     int position, long id) {
                 ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("product",createAdvertisementData(position));
+                bundle.putSerializable("ProductData",createAdvertisementData(position));
                 fragment.setArguments(bundle);
-                Fragment x = getFragmentManager().findFragmentByTag("ANTON");
-                getFragmentManager().beginTransaction().remove(x).add(R.id.fragment, fragment).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -132,7 +132,6 @@ public class AdvertisementFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("userObject", loggedInUser);
                 fragment.setArguments(bundle);
-                (v.findViewById(R.id.fab)).setVisibility(View.GONE);
                 getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
             }
         });

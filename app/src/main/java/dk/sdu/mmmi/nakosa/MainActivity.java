@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeView() {
-        Intent intent = new Intent(MainActivity.this, AdvertisementActivity.class);
+        Intent intent = new Intent(MainActivity.this, FrontActivity.class);
         intent.putExtra("userObject", user);
         startActivity(intent);
     }
