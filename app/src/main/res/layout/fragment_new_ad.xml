@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    tools:context="dk.sdu.mmmi.nakosa.NewAdActivity">
+    tools:context="dk.sdu.mmmi.nakosa.NewAdFragment">
 
     <include layout="@layout/include_progress_overlay"/>
     <TextView
@@ -79,7 +79,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/colorAccent"
-        android:onClick="useCamera"
         android:text="@string/new_ad_add_image"
         android:textColor="@color/backgroundColor"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +91,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/colorAccent"
-        android:onClick="createNewAd"
         android:text="@string/new_ad_create"
         android:textColor="@color/backgroundColor"
         app:layout_constraintStart_toStartOf="parent"

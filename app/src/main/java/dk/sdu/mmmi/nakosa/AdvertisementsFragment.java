@@ -84,7 +84,7 @@ public class AdvertisementsFragment extends Fragment {
                 entry.put("Product", databaseAdvertisement.Product);
                 entry.put("Description", databaseAdvertisement.Description);
                 entry.put("Price", databaseAdvertisement.Price);
-                //entry.put("Seller", databaseAdvertisement.getSeller());
+                entry.put("Seller", databaseAdvertisement.Seller);
                 entry.put("ImagePath", databaseAdvertisement.ImagePath);
                 entry.put("Image", null);
                 downloadImage(dataSnapshot.getKey(), databaseAdvertisement.ImagePath);
@@ -180,7 +180,7 @@ public class AdvertisementsFragment extends Fragment {
     private AdvertisementData createAdvertisementData(int position) {
         AdvertisementData data = new AdvertisementData();
         data.setProductName((String) ads.get(position).get("Product"));
-        data.setSeller("Antjon");
+        data.setSeller((String) ads.get(position).get("Seller"));
         data.setDescription((String) ads.get(position).get("Description"));
         data.setImagePath((String) ads.get(position).get("ImagePath"));
         data.setPrice((String) ads.get(position).get("Price"));
