@@ -9,14 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -50,7 +46,7 @@ public class NewAdFragment extends Fragment {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private View progress;
-    private User loggedInUser;
+    private UserData loggedInUser;
     private View v;
 
 
@@ -59,8 +55,8 @@ public class NewAdFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_new_ad, container, false);
         ButterKnife.bind(this,v);
 
-        loggedInUser = (User) getArguments().getSerializable("userObject");
-        progress = v.findViewById(R.id.progress_overlay);
+        loggedInUser = UserData.getInstance();
+        progress = getActivity().findViewById(R.id.progress_overlay);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -121,7 +117,7 @@ public class NewAdFragment extends Fragment {
         File file = new File(compressedPath);
         try {
             out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             this.compressedPath = compressedPath;
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,6 +186,7 @@ public class NewAdFragment extends Fragment {
 
     private void saveInDB(HashMap<String, String> dbEntry) {
         databaseReference.push().setValue(dbEntry);
+        progress.setVisibility(View.GONE);
         AdvertisementsFragment fragment = new AdvertisementsFragment();
         getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }

@@ -1,8 +1,6 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,17 +44,15 @@ public class AdvertisementsFragment extends Fragment {
     private List<Map<String, Object>> ads;
     private ImageAdapter adapter;
     private ProgressBar initialLoadProgressBar;
-    private User loggedInUser;
+    private UserData loggedInUser;
     private View v;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        loggedInUser = UserData.getInstance();
 
         v = inflater.inflate(R.layout.fragment_advertisement, container, false);
-        if(getArguments() != null){
-            loggedInUser = (User) getArguments().getSerializable("userObject");
-            ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + loggedInUser.getFirstName());
-        }
+        ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + " " + loggedInUser.getFirstName());
 
         initialLoadProgressBar = v.findViewById(R.id.initialSpinner);
 
@@ -74,10 +69,7 @@ public class AdvertisementsFragment extends Fragment {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {
-                };
                 DatabaseAdvertisement databaseAdvertisement = dataSnapshot.getValue(DatabaseAdvertisement.class);
-                //Map<String, String> product = dataSnapshot.getValue(genericTypeIndicator);
                 Map<String, Object> entry = new HashMap<>();
 
                 entry.put("Key", dataSnapshot.getKey());
@@ -118,7 +110,7 @@ public class AdvertisementsFragment extends Fragment {
                                     int position, long id) {
                 ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("ProductData",createAdvertisementData(position));
+                bundle.putSerializable("ProductData", createAdvertisementData(position));
                 fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
             }
@@ -129,9 +121,6 @@ public class AdvertisementsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NewAdFragment fragment = new NewAdFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("userObject", loggedInUser);
-                fragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
             }
         });

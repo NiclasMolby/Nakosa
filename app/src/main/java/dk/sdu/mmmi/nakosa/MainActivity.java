@@ -23,12 +23,13 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
-    User user;
+    UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userData = UserData.getInstance();
 
         checkLoginStatus();
 
@@ -57,16 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkLoginStatus() {
         if(AccessToken.getCurrentAccessToken() != null){
-            user = new User(
-                    Profile.getCurrentProfile().getFirstName(),
-                    Profile.getCurrentProfile().getLastName());
+            userData.setFirstName(Profile.getCurrentProfile().getFirstName());
+            userData.setLastName(Profile.getCurrentProfile().getLastName());
             changeView();
         }
     }
 
     private void changeView() {
         Intent intent = new Intent(MainActivity.this, FrontActivity.class);
-        intent.putExtra("userObject", user);
         startActivity(intent);
     }
 
@@ -83,9 +82,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
-                            user = new User(
-                                    response.getJSONObject().getString("first_name"),
-                                    response.getJSONObject().getString("last_name"));
+                            userData.setFirstName(response.getJSONObject().getString("first_name"));
+                            userData.setLastName(response.getJSONObject().getString("last_name"));
                             changeView();
 
                         } catch (JSONException e) {

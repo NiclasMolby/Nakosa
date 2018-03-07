@@ -7,7 +7,6 @@
     android:background="@color/backgroundColor"
     tools:context="dk.sdu.mmmi.nakosa.NewAdFragment">
 
-    <include layout="@layout/include_progress_overlay"/>
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
