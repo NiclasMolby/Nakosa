@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static android.app.Activity.RESULT_OK;
 
 public class NewAdFragment extends Fragment {
@@ -45,17 +46,17 @@ public class NewAdFragment extends Fragment {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private View progress;
-    private User loggedInUser;
+    private UserData loggedInUser;
     private View v;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_new_ad, container, false);
-        Log.d("New Ad", "Created new ad");
+        ButterKnife.bind(this,v);
 
-        loggedInUser = (User) getArguments().getSerializable("userObject");
-        progress = v.findViewById(R.id.progress_overlay);
+        loggedInUser = UserData.getInstance();
+        progress = getActivity().findViewById(R.id.progress_overlay);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -63,14 +64,18 @@ public class NewAdFragment extends Fragment {
         return v;
     }
 
-    /*
-    public void useCamera(View view) {
+    @OnClick(R.id.addPicture)
+    public void useCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
-            photoFile = null;//createImageFile();
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(getContext(),
@@ -80,7 +85,7 @@ public class NewAdFragment extends Fragment {
                 startActivityForResult(takePictureIntent, CAMERA_CODE);
             }
         }
-    }*/
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
@@ -112,7 +117,7 @@ public class NewAdFragment extends Fragment {
         File file = new File(compressedPath);
         try {
             out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             this.compressedPath = compressedPath;
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,12 +132,12 @@ public class NewAdFragment extends Fragment {
         }
     }
 
-    /*
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
@@ -143,9 +148,9 @@ public class NewAdFragment extends Fragment {
         picturePath = image.getAbsolutePath();
         return image;
     }
-    */
 
-    public void createNewAd(View view) {
+    @OnClick(R.id.addAd)
+    public void createNewAd() {
         if (validateFields()) {
             progress.setVisibility(View.VISIBLE);
             uploadImageToStorageAndSaveInDB(getFieldsValue());
@@ -165,7 +170,7 @@ public class NewAdFragment extends Fragment {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        //dbEntry.put("ImagePath", downloadUrl.getPath());
+                        dbEntry.put("ImagePath", downloadUrl.getPath());
                         dbEntry.put("ImagePath", imageName);
                         saveInDB(dbEntry);
                     }
@@ -181,7 +186,9 @@ public class NewAdFragment extends Fragment {
 
     private void saveInDB(HashMap<String, String> dbEntry) {
         databaseReference.push().setValue(dbEntry);
-        //finish();
+        progress.setVisibility(View.GONE);
+        AdvertisementsFragment fragment = new AdvertisementsFragment();
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 
     private void uploadError() {
