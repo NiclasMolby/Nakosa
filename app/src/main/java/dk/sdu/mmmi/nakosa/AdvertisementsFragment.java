@@ -50,6 +50,7 @@ public class AdvertisementsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         loggedInUser = UserData.getInstance();
+        Log.d("Saved", ""+savedInstanceState);
 
         v = inflater.inflate(R.layout.fragment_advertisement, container, false);
         ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + " " + loggedInUser.getFirstName());
@@ -65,6 +66,7 @@ public class AdvertisementsFragment extends Fragment {
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
+        
 
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override

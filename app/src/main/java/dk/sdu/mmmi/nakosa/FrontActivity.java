@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class FrontActivity extends AppCompatActivity {
@@ -14,6 +15,13 @@ public class FrontActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front);
 
+        Log.d("Fragment", "Fragment count: " + getFragmentManager().getBackStackEntryCount());
+        if(getFragmentManager().getBackStackEntryCount() == 0) {
+            AdvertisementsFragment fragment = new AdvertisementsFragment();
+            fragment.setArguments(getIntent().getExtras());
+            getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+        }
+        setContentView(R.layout.activity_front);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
