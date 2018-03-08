@@ -1,9 +1,7 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,26 +11,28 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 /**
  * Created by Antonio on 07-03-2018.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyAdsViewHolder> {
 
     private List<AdvertisementData> dataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MyAdsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView cardText;
-        private ImageView imageTest;
+        private ImageView image;
         private AdvertisementData data;
 
-        public ViewHolder(View itemView) {
+        public MyAdsViewHolder(View itemView) {
             super(itemView);
             cardText = itemView.findViewById(R.id.info_text);
-            imageTest = itemView.findViewById(R.id.image_test);
+            image = itemView.findViewById(R.id.my_ad_image);
 
             itemView.setOnClickListener(this);
         }
@@ -41,6 +41,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             this.data = data;
 
             this.cardText.setText(this.data.getProductName());
+            if(this.data.getDownloadPath() != null) {
+                Glide.with(itemView)
+                        .load(this.data.getDownloadPath())
+                        .into(image);
+                Log.d("DownloadCard", this.data.getDownloadPath());
+            }
         }
 
         @Override
@@ -59,14 +65,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyAdsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         FrameLayout v = (FrameLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.recycle_cardview, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        MyAdsViewHolder vh = new MyAdsViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(MyAdsViewHolder holder, int position) {
         holder.setData(dataSet.get(position));
     }
 

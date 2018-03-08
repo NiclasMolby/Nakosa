@@ -64,7 +64,7 @@ public class ImageAdapter extends BaseAdapter {
 
             text.setText((String) ads.get(i).get("Product"));
             img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
-            /*ViewHolder viewHolder = new ViewHolder();
+            /*MyAdsViewHolder viewHolder = new MyAdsViewHolder();
             viewHolder.text = text;
             viewHolder.image = img;
             viewHolder.progressBar = progressBar;
@@ -72,7 +72,7 @@ public class ImageAdapter extends BaseAdapter {
 
         } else {
             newView = view;
-            ViewHolder viewHolder = (ViewHolder) newView.getTag();
+            MyAdsViewHolder viewHolder = (MyAdsViewHolder) newView.getTag();
             viewHolder.text.setText((String) ads.get(i).get("Product"));
             viewHolder.image.setImageBitmap((Bitmap) ads.get(i).get("Image"));
 

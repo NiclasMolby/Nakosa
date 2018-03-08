@@ -170,8 +170,10 @@ public class NewAdFragment extends Fragment {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.d("URL", downloadUrl.toString());
                         dbEntry.put("ImagePath", downloadUrl.getPath());
                         dbEntry.put("ImagePath", imageName);
+                        dbEntry.put("ImageDownloadPath", downloadUrl.toString());
                         saveInDB(dbEntry);
                     }
                 })

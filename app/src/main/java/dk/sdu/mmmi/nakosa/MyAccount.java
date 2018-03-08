@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,9 @@ public class MyAccount extends Fragment {
             ad.setSeller(snap.child("Seller").getValue().toString());
             ad.setPrice(snap.child("Price").getValue().toString());
             ad.setImagePath(snap.child("ImagePath").getValue().toString());
+            if(snap.child("ImageDownloadPath").getValue() != null) {
+                ad.setDownloadPath(snap.child("ImageDownloadPath").getValue().toString());
+            }
             datas.add(ad);
             mAdapter = new MyAdapter(datas);
             mRecyclerView.setAdapter(mAdapter);

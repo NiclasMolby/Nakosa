@@ -175,6 +175,7 @@ public class AdvertisementsFragment extends Fragment {
         data.setDescription((String) ads.get(position).get("Description"));
         data.setImagePath((String) ads.get(position).get("ImagePath"));
         data.setPrice((String) ads.get(position).get("Price"));
+        data.setDownloadPath((String) ads.get(position).get("ImageDownloadPath"));
 
         return data;
     }
