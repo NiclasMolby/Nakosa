@@ -9,13 +9,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by Antonio on 07-03-2018.
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private String[] dataSet;
+    private List<DatabaseAdvertisement> dataSet;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,7 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    public MyAdapter(String[] dataSet) {
+    public MyAdapter(List<DatabaseAdvertisement> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -44,11 +46,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.cardText.setText(dataSet[position]);
+        holder.cardText.setText(dataSet.get(position).Product);
     }
 
     @Override
     public int getItemCount() {
-        return dataSet.length;
+        return dataSet.size();
     }
 }

@@ -46,10 +46,7 @@ public class MyAccount extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()) {
-                    //DatabaseAdvertisement ad = new DatabaseAdvertisement();
-                    Log.d("Snap", snap.child("Product").getValue().toString());
-                }
+                createCards(dataSnapshot);
             }
 
             @Override
@@ -65,10 +62,16 @@ public class MyAccount extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        String[] dataSet = {"Piklas", "Er", "En", "Lort"};
-        mAdapter = new MyAdapter(dataSet);
-        mRecyclerView.setAdapter(mAdapter);
-
         return v;
+    }
+
+    private void createCards(DataSnapshot dataSnapshot) {
+        for(DataSnapshot snap : dataSnapshot.getChildren()) {
+            DatabaseAdvertisement ad = new DatabaseAdvertisement();
+            ad.Product = snap.child("Product").getValue().toString();
+            datas.add(ad);
+            mAdapter = new MyAdapter(datas);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 }
