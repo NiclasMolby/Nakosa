@@ -1,7 +1,11 @@
 package dk.sdu.mmmi.nakosa;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +21,40 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private List<DatabaseAdvertisement> dataSet;
+    private List<AdvertisementData> dataSet;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public CardView card;
-        public TextView cardText;
-        public ImageView imageTest;
+        private TextView cardText;
+        private ImageView imageTest;
+        private AdvertisementData data;
 
         public ViewHolder(View itemView) {
             super(itemView);
-           // card = itemView.findViewById(R.id.card_view);
             cardText = itemView.findViewById(R.id.info_text);
             imageTest = itemView.findViewById(R.id.image_test);
+
+            itemView.setOnClickListener(this);
+        }
+
+        public void setData(AdvertisementData data) {
+            this.data = data;
+
+            this.cardText.setText(this.data.getProductName());
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("On card click", "Get adapter pos: " + getAdapterPosition() + "; Name: " + cardText.getText().toString());
+            ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ProductData", data);
+            fragment.setArguments(bundle);
+            ((Activity) view.getContext()).getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
         }
     }
 
-    public MyAdapter(List<DatabaseAdvertisement> dataSet) {
+    public MyAdapter(List<AdvertisementData> dataSet) {
         this.dataSet = dataSet;
     }
 
@@ -46,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.cardText.setText(dataSet.get(position).Product);
+        holder.setData(dataSet.get(position));
     }
 
     @Override

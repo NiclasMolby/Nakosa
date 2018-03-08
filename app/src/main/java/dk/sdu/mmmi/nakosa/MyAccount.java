@@ -29,7 +29,7 @@ public class MyAccount extends Fragment {
     private View v;
     private UserData userData = UserData.getInstance();
     private DatabaseReference databaseReference;
-    private List<DatabaseAdvertisement> datas;
+    private List<AdvertisementData> datas;
 
     public MyAccount() {
     }
@@ -67,8 +67,12 @@ public class MyAccount extends Fragment {
 
     private void createCards(DataSnapshot dataSnapshot) {
         for(DataSnapshot snap : dataSnapshot.getChildren()) {
-            DatabaseAdvertisement ad = new DatabaseAdvertisement();
-            ad.Product = snap.child("Product").getValue().toString();
+            AdvertisementData ad = new AdvertisementData();
+            ad.setProductName(snap.child("Product").getValue().toString());
+            ad.setDescription(snap.child("Description").getValue().toString());
+            ad.setSeller(snap.child("Seller").getValue().toString());
+            ad.setPrice(snap.child("Price").getValue().toString());
+            ad.setImagePath(snap.child("ImagePath").getValue().toString());
             datas.add(ad);
             mAdapter = new MyAdapter(datas);
             mRecyclerView.setAdapter(mAdapter);
