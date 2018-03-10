@@ -53,7 +53,7 @@ public class NewAdFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_new_ad, container, false);
-        ButterKnife.bind(this,v);
+        ButterKnife.bind(this, v);
 
         loggedInUser = UserData.getInstance();
         progress = getActivity().findViewById(R.id.progress_overlay);
@@ -97,7 +97,7 @@ public class NewAdFragment extends Fragment {
             Log.d("Source image", "Source height: " + bitmap.getHeight());
             Log.d("Source image", "Source width: " + bitmap.getWidth());
             Log.d("Ratio", "Ratio: " + ratio);
-            Log.d("Target image", "Target Height: "+targetHeight);
+            Log.d("Target image", "Target Height: " + targetHeight);
             Log.d("Target image", "Target width: " + targetWidth);
             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, false);
             Log.d("Source image", "Source size: " + bitmap.getAllocationByteCount());
@@ -113,7 +113,7 @@ public class NewAdFragment extends Fragment {
 
     private void writeCompressedImage(Bitmap bitmap) {
         FileOutputStream out = null;
-        String compressedPath = picturePath.substring(0, picturePath.length()-4) + "_compressed.jpg";
+        String compressedPath = picturePath.substring(0, picturePath.length() - 4) + "_compressed.jpg";
         File file = new File(compressedPath);
         try {
             out = new FileOutputStream(file);
@@ -171,7 +171,6 @@ public class NewAdFragment extends Fragment {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Log.d("URL", downloadUrl.toString());
-                        dbEntry.put("ImagePath", downloadUrl.getPath());
                         dbEntry.put("ImagePath", imageName);
                         dbEntry.put("ImageDownloadPath", downloadUrl.toString());
                         saveInDB(dbEntry);

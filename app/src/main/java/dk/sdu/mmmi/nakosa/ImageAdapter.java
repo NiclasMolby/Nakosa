@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.w3c.dom.Text;
 
 import java.util.Collections;
@@ -48,22 +50,26 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View newView;
         //if(view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            newView = inflater.inflate(R.layout.grid_item, null);
+        newView = inflater.inflate(R.layout.grid_item, null);
 
-            ImageView img = newView.findViewById(R.id.imageView);
-            TextView text = newView.findViewById(R.id.textView);
-            ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
+        ImageView img = newView.findViewById(R.id.imageView);
+        TextView text = newView.findViewById(R.id.textView);
+        ProgressBar progressBar = newView.findViewById(R.id.imageProgress);
 
-            img.setClipToOutline(true);
+        img.setClipToOutline(true);
 
-            if (ads.get(i).get("Image") != null) {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
+        if (ads.get(i).get("Image") != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+        }
 
-            text.setText((String) ads.get(i).get("Product"));
-            img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
+        Log.d("Download Path", ""+ads.get(i).get("DownloadPath"));
+        Glide.with(newView)
+                .load(ads.get(i).get("DownloadPath"))
+                .into(img);
+        text.setText((String) ads.get(i).get("Product"));
+        //img.setImageBitmap((Bitmap) ads.get(i).get("Image"));
             /*MyAdsViewHolder viewHolder = new MyAdsViewHolder();
             viewHolder.text = text;
             viewHolder.image = img;

@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,49 +43,89 @@ public class AdvertisementsFragment extends Fragment {
 
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
-    private List<Map<String, Object>> ads;
-    private ImageAdapter adapter;
+    private List<AdvertisementData> ads;
     private ProgressBar initialLoadProgressBar;
     private UserData loggedInUser;
     private View v;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        loggedInUser = UserData.getInstance();
-        Log.d("Saved", ""+savedInstanceState);
-
         v = inflater.inflate(R.layout.fragment_advertisement, container, false);
         ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + " " + loggedInUser.getFirstName());
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
+
+        loggedInUser = UserData.getInstance();
+        Log.d("Saved", ""+savedInstanceState);
 
         initialLoadProgressBar = v.findViewById(R.id.initialSpinner);
 
         ads = new ArrayList<>();
 
-        GridView gridview = v.findViewById(R.id.gridview);
+        /*final GridView gridview = v.findViewById(R.id.gridview);
         adapter = new ImageAdapter(getContext(), ads);
         gridview.setAdapter(adapter);
+*/
+        setupRecycler();
+        downloadData();
 
+        mAdapter = new AdvertisementsGridAdapter(ads);
+        mRecyclerView.setAdapter(mAdapter);
 
-        storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
-        
+        /*gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("ProductData", createAdvertisementData(position));
+                fragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
+            }
+        });*/
 
+        FloatingActionButton fab = v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NewAdFragment fragment = new NewAdFragment();
+                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
+            }
+        });
+
+        return v;
+    }
+
+    private void setupRecycler() {
+        mRecyclerView = v.findViewById(R.id.advertisement_content_recycler);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
+
+    private void downloadData() {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 DatabaseAdvertisement databaseAdvertisement = dataSnapshot.getValue(DatabaseAdvertisement.class);
-                Map<String, Object> entry = new HashMap<>();
+                //Map<String, Object> entry = new HashMap<>();
 
-                entry.put("Key", dataSnapshot.getKey());
-                entry.put("Product", databaseAdvertisement.Product);
-                entry.put("Description", databaseAdvertisement.Description);
-                entry.put("Price", databaseAdvertisement.Price);
-                entry.put("Seller", databaseAdvertisement.Seller);
-                entry.put("ImagePath", databaseAdvertisement.ImagePath);
-                entry.put("Image", null);
-                downloadImage(dataSnapshot.getKey(), databaseAdvertisement.ImagePath);
+                //entry.put("Key", dataSnapshot.getKey());
+//                entry.put("Product", databaseAdvertisement.Product);
+//                entry.put("Description", databaseAdvertisement.Description);
+//                entry.put("Price", databaseAdvertisement.Price);
+//                entry.put("Seller", databaseAdvertisement.Seller);
+//                entry.put("ImagePath", databaseAdvertisement.ImagePath);
+//                entry.put("DownloadPath", databaseAdvertisement.ImageDownloadPath);
+//                entry.put("Image", null);
+                //downloadImage(dataSnapshot.getKey(), databaseAdvertisement.ImagePath);
 
-                ads.add(entry);
+                ads.add(mapDatabaseResult(databaseAdvertisement));
+                //adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -106,30 +148,19 @@ public class AdvertisementsFragment extends Fragment {
 
             }
         });
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                ViewAdvertisementFragment fragment = new ViewAdvertisementFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("ProductData", createAdvertisementData(position));
-                fragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
-            }
-        });
-
-        FloatingActionButton fab = v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NewAdFragment fragment = new NewAdFragment();
-                getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
-            }
-        });
-
-        return v;
     }
 
+    private AdvertisementData mapDatabaseResult(DatabaseAdvertisement data) {
+        AdvertisementData advertisementData = new AdvertisementData();
+        advertisementData.setSeller(data.Seller);
+        advertisementData.setProductName(data.Product);
+        advertisementData.setDescription(data.Description);
+        advertisementData.setPrice(data.Price);
+        advertisementData.setDownloadPath(data.ImageDownloadPath);
+
+        return advertisementData;
+    }
+/*
     private String downloadImage(final String ID, final String imageName) {
         Log.d("Download", "Download image " + imageName + " from firebase storage");
         File localFile = null;
@@ -178,5 +209,5 @@ public class AdvertisementsFragment extends Fragment {
         data.setDownloadPath((String) ads.get(position).get("ImageDownloadPath"));
 
         return data;
-    }
+    }*/
 }

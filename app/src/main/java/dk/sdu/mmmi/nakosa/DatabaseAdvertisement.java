@@ -10,6 +10,7 @@ public class DatabaseAdvertisement {
     public String Seller;
     public String Price;
     public String ImagePath;
+    public String ImageDownloadPath;
 
     public DatabaseAdvertisement() {
     }
