@@ -102,7 +102,7 @@ public class AdvertisementsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
 
-        mLayoutManager = new GridLayoutManager(getContext(), 10);
+        mLayoutManager = new GridLayoutManager(getContext(), 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
