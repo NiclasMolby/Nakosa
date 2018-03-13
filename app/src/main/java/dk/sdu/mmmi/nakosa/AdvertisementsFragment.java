@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,7 +43,6 @@ import java.util.Map;
 public class AdvertisementsFragment extends Fragment {
 
     private DatabaseReference databaseReference;
-    private StorageReference storageReference;
     private List<AdvertisementData> ads;
     private ProgressBar initialLoadProgressBar;
     private UserData loggedInUser;
@@ -53,13 +53,12 @@ public class AdvertisementsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        loggedInUser = UserData.getInstance();
         v = inflater.inflate(R.layout.fragment_advertisement, container, false);
-        ((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + " " + loggedInUser.getFirstName());
+        //((TextView) v.findViewById(R.id.textView4)).setText(getString(R.string.welcome_text) + " " + loggedInUser.getFirstName());
 
-        storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
 
-        loggedInUser = UserData.getInstance();
         Log.d("Saved", ""+savedInstanceState);
 
         initialLoadProgressBar = v.findViewById(R.id.initialSpinner);
@@ -73,8 +72,7 @@ public class AdvertisementsFragment extends Fragment {
         setupRecycler();
         downloadData();
 
-        mAdapter = new AdvertisementsGridAdapter(ads);
-        mRecyclerView.setAdapter(mAdapter);
+
 
         /*gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -103,7 +101,8 @@ public class AdvertisementsFragment extends Fragment {
         mRecyclerView = v.findViewById(R.id.advertisement_content_recycler);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
+
+        mLayoutManager = new GridLayoutManager(getContext(), 10);
         mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
@@ -112,20 +111,10 @@ public class AdvertisementsFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 DatabaseAdvertisement databaseAdvertisement = dataSnapshot.getValue(DatabaseAdvertisement.class);
-                //Map<String, Object> entry = new HashMap<>();
-
-                //entry.put("Key", dataSnapshot.getKey());
-//                entry.put("Product", databaseAdvertisement.Product);
-//                entry.put("Description", databaseAdvertisement.Description);
-//                entry.put("Price", databaseAdvertisement.Price);
-//                entry.put("Seller", databaseAdvertisement.Seller);
-//                entry.put("ImagePath", databaseAdvertisement.ImagePath);
-//                entry.put("DownloadPath", databaseAdvertisement.ImageDownloadPath);
-//                entry.put("Image", null);
-                //downloadImage(dataSnapshot.getKey(), databaseAdvertisement.ImagePath);
 
                 ads.add(mapDatabaseResult(databaseAdvertisement));
-                //adapter.notifyDataSetChanged();
+                mAdapter = new AdvertisementsGridAdapter(ads);
+                mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
