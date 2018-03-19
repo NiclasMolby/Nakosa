@@ -15,11 +15,15 @@ public class FrontActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_front);
 
-        Log.d("Fragment", "Fragment count: " + getFragmentManager().getBackStackEntryCount());
+
+
         if(getFragmentManager().getBackStackEntryCount() == 0) {
             AdvertisementsFragment fragment = new AdvertisementsFragment();
             fragment.setArguments(getIntent().getExtras());
-            getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
+        }
+        else {
+            Log.d("BackStackItem", ""+getFragmentManager().getBackStackEntryAt(1));
         }
         setContentView(R.layout.activity_front);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
@@ -44,8 +48,8 @@ public class FrontActivity extends AppCompatActivity {
                     }
                 });
 
-        AdvertisementsFragment fragment = new AdvertisementsFragment();
-        fragment.setArguments(getIntent().getExtras());
-        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+//        AdvertisementsFragment fragment = new AdvertisementsFragment();
+//        fragment.setArguments(getIntent().getExtras());
+//        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).addToBackStack(null).commit();
     }
 }
