@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -53,7 +54,12 @@ public class ViewAdvertisementFragment extends Fragment {
         seller.setText(data.getSeller());
         description.setText(data.getDescription());
 
-        downloadImage(data.getImagePath());
+        Glide.with(v)
+                .load(data.getDownloadPath())
+                .into(image);
+        v.findViewById(R.id.viewAdImageProgress).setVisibility(View.GONE);
+
+        //downloadImage(data.getImagePath());
 
         return v;
     }

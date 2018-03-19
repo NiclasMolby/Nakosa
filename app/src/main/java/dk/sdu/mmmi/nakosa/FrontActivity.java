@@ -39,7 +39,7 @@ public class FrontActivity extends AppCompatActivity {
                                 selectedFragment = new MyAccount();
                                 break;
                         }
-                        getFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment).addToBackStack(null).commit();
                         return true;
                     }
                 });
