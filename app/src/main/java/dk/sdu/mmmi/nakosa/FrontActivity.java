@@ -1,9 +1,10 @@
 package dk.sdu.mmmi.nakosa;
 
-import android.app.Fragment;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,7 +20,7 @@ public class FrontActivity extends AppCompatActivity {
         if(getFragmentManager().getBackStackEntryCount() == 0) {
             AdvertisementsFragment fragment = new AdvertisementsFragment();
             fragment.setArguments(getIntent().getExtras());
-            getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
         }
         setContentView(R.layout.activity_front);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
@@ -36,16 +37,16 @@ public class FrontActivity extends AppCompatActivity {
                                 selectedFragment = new MyAccount();
                                 break;
                             case R.id.action_settings:
-                                selectedFragment = new MyAccount();
+                                selectedFragment = new Settings();
                                 break;
                         }
-                        getFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment).commit();
                         return true;
                     }
                 });
 
         AdvertisementsFragment fragment = new AdvertisementsFragment();
         fragment.setArguments(getIntent().getExtras());
-        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 }
