@@ -1,6 +1,7 @@
 package dk.sdu.mmmi.nakosa;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -25,6 +26,9 @@ public class Settings extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 System.out.println("Clicked!");
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("Logout", true);
+                startActivity(intent);
                 return true;
             }
         });

@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
     UserData userData;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userData = UserData.getInstance();
 
-        checkLoginStatus();
+        intent = getIntent();
+
+        performAction();
+
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -54,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
                         ((TextView) findViewById(R.id.textView)).setText("Logged in failed :(");
                     }
                 });
+    }
+
+    private void performAction() {
+        if(intent.getBooleanExtra("Logout", false)) {
+            LoginManager.getInstance().logOut();
+        }
+        else {
+            checkLoginStatus();
+        }
     }
 
     private void checkLoginStatus() {
