@@ -20,7 +20,7 @@ public class Settings extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
 
-        Preference button = (Preference)getPreferenceManager().findPreference("logOut");
+        Preference button = getPreferenceManager().findPreference("logOut");
         button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

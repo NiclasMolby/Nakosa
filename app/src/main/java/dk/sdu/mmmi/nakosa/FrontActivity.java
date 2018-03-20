@@ -19,9 +19,9 @@ public class FrontActivity extends AppCompatActivity {
 
 
         if(getFragmentManager().getBackStackEntryCount() == 0) {
-            AdvertisementsFragment fragment = new AdvertisementsFragment();
+            Fragment fragment = new AdvertisementsFragment();
             fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, fragment.getClass().toString()).commit();
         }
         else {
             Log.d("BackStackItem", ""+getFragmentManager().getBackStackEntryAt(1));
@@ -44,13 +44,13 @@ public class FrontActivity extends AppCompatActivity {
                                 selectedFragment = new Settings();
                                 break;
                         }
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment).commit();
+                        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment);
+                        if(!selectedFragment.getClass().toString().equals(frag.getTag())) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment, selectedFragment.getClass().toString()).commit();
+                        }
                         return true;
                     }
                 });
 
-        AdvertisementsFragment fragment = new AdvertisementsFragment();
-        fragment.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
     }
 }
