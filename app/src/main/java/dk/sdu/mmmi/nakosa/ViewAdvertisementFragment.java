@@ -38,6 +38,12 @@ public class ViewAdvertisementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         v = inflater.inflate(R.layout.fragment_view_advertisement, container, false);
+        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("ProductData");
+
+        if(!data.getSeller().equals(UserData.getInstance().getName())) {
+            View delete_button = v.findViewById(R.id.delete_ad);
+            delete_button.setVisibility(View.GONE);
+        }
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -47,7 +53,6 @@ public class ViewAdvertisementFragment extends Fragment {
         description = v.findViewById(R.id.description);
         image = v.findViewById(R.id.image);
 
-        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("ProductData");
 
         productName.setText(data.getProductName());
         price.setText(data.getPrice());

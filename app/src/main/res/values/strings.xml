@@ -17,4 +17,5 @@
     <string name="new_ad_create">Opret annonce</string>
     <string name="uploading_overlay">Uploading annonce...</string>
     <string name="welcome_text">Velkommen</string>
+    <string name="delete_ad">Slet annonce!</string>
 </resources>
