@@ -15,4 +15,6 @@
     <string name="view_ad_description">Description:</string>
     <string name="new_ad_product">Product</string>
     <string name="delete_ad">Delete ad</string>
+    <string name="logout_title">Log Out</string>
+    <string name="logout_summary">Press here to log out</string>
 </resources>

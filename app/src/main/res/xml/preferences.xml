@@ -2,7 +2,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <Preference
-        android:title="Log Out"
-        android:summary="Press here to log out"
+        android:title="@string/logout_title"
+        android:summary="@string/logout_summary"
         android:key="logOut"/>
 </PreferenceScreen>

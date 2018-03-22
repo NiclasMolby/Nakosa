@@ -18,4 +18,6 @@
     <string name="uploading_overlay">Uploading annonce...</string>
     <string name="welcome_text">Velkommen</string>
     <string name="delete_ad">Slet annonce!</string>
+    <string name="logout_title">Log ud</string>
+    <string name="logout_summary">Tryk her for at logge ud</string>
 </resources>
