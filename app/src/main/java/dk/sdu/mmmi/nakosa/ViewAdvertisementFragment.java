@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.nakosa;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,12 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -23,10 +27,14 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 
-public class ViewAdvertisementFragment extends Fragment {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    private StorageReference storageReference;
+public class ViewAdvertisementFragment extends Fragment implements AlertDialog.AlertDialogNotifier {
 
+    private DatabaseReference databaseReference;
+
+    private AdvertisementData data;
     private TextView productName;
     private TextView price;
     private TextView seller;
@@ -38,14 +46,17 @@ public class ViewAdvertisementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         v = inflater.inflate(R.layout.fragment_view_advertisement, container, false);
-        AdvertisementData data = (AdvertisementData) getArguments().getSerializable("ProductData");
+        ButterKnife.bind(this, v);
 
+        data = (AdvertisementData) getArguments().getSerializable("ProductData");
+
+        Log.d("SellerName", data.getSeller());
+        Log.d("SellerName", UserData.getInstance().getName());
+        Log.d("SellerName",""+data.getSeller().equals(UserData.getInstance().getName()));
         if(!data.getSeller().equals(UserData.getInstance().getName())) {
-            View delete_button = v.findViewById(R.id.delete_ad);
+            Button delete_button = v.findViewById(R.id.delete_ad);
             delete_button.setVisibility(View.GONE);
         }
-
-        storageReference = FirebaseStorage.getInstance().getReference();
 
         productName = v.findViewById(R.id.productName);
         price = v.findViewById(R.id.price);
@@ -64,40 +75,23 @@ public class ViewAdvertisementFragment extends Fragment {
                 .into(image);
         v.findViewById(R.id.viewAdImageProgress).setVisibility(View.GONE);
 
-        //downloadImage(data.getImagePath());
-
         return v;
     }
 
-    private void downloadImage(final String imageName) {
-        Log.d("Download", "Download image " + imageName + " from firebase storage");
-        File localFile = null;
-        StorageReference imageRef = storageReference.child("images/" + imageName);
-
-        try {
-            localFile = File.createTempFile("images" + imageName, "jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        final File finalLocalFile = localFile;
-        imageRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        generateBitmapAndUpdateImage(finalLocalFile.getAbsolutePath());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
-            }
-        });
+    @OnClick(R.id.delete_ad)
+    public void deleteAd() {
+        AlertDialog d = new AlertDialog();
+        d.show(getFragmentManager(), "alert");
     }
 
-    private void generateBitmapAndUpdateImage(String imagePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        image.setImageBitmap(bitmap);
-        v.findViewById(R.id.viewAdImageProgress).setVisibility(View.GONE);
+    @Override
+    public void onPositiveClick(DialogFragment dialogFragment) {
+        Log.d("Delete ad", data.getKey());
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements").child(data.getKey());
+        databaseReference.removeValue();
+
+        // Start fragment
+        Fragment fragment = new AdvertisementsFragment();
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, fragment.getClass().toString()).commit();
     }
 }

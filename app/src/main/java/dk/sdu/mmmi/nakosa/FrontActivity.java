@@ -1,13 +1,11 @@
 package dk.sdu.mmmi.nakosa;
 
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 public class FrontActivity extends AppCompatActivity {
@@ -21,10 +19,7 @@ public class FrontActivity extends AppCompatActivity {
         if(getFragmentManager().getBackStackEntryCount() == 0) {
             Fragment fragment = new AdvertisementsFragment();
             fragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, fragment.getClass().toString()).commit();
-        }
-        else {
-            Log.d("BackStackItem", ""+getFragmentManager().getBackStackEntryAt(1));
+            getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, fragment.getClass().toString()).commit();
         }
         setContentView(R.layout.activity_front);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
@@ -44,9 +39,9 @@ public class FrontActivity extends AppCompatActivity {
                                 selectedFragment = new Settings();
                                 break;
                         }
-                        Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fragment);
+                        Fragment frag = getFragmentManager().findFragmentById(R.id.fragment);
                         if(!selectedFragment.getClass().toString().equals(frag.getTag())) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment, selectedFragment.getClass().toString()).commit();
+                            getFragmentManager().beginTransaction().replace(R.id.fragment, selectedFragment, selectedFragment.getClass().toString()).commit();
                         }
                         return true;
                     }

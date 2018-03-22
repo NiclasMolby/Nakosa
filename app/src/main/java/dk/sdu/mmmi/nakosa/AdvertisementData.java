@@ -4,12 +4,21 @@ import java.io.Serializable;
 
 public class AdvertisementData implements Serializable {
 
+    private String key;
     private String productName;
     private String description;
     private String price;
     private String seller;
     private String imagePath;
     private String downloadPath;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getProductName() {
         return productName;

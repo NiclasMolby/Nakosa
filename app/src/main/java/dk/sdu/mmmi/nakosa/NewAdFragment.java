@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -190,7 +190,7 @@ public class NewAdFragment extends Fragment {
         databaseReference.push().setValue(dbEntry);
         progress.setVisibility(View.GONE);
         AdvertisementsFragment fragment = new AdvertisementsFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, fragment.getClass().toString()).commit();
     }
 
     private void uploadError() {
@@ -223,7 +223,7 @@ public class NewAdFragment extends Fragment {
         EditText product = v.findViewById(R.id.productName);
         EditText price = v.findViewById(R.id.price);
         EditText description = v.findViewById(R.id.description);
-        databaseEntry.put("Seller", loggedInUser.getFirstName() + " " + loggedInUser.getLastName());
+        databaseEntry.put("Seller", loggedInUser.getName());
         databaseEntry.put("Product", product.getText().toString());
         databaseEntry.put("Price", price.getText().toString());
         databaseEntry.put("Description", description.getText().toString().trim());

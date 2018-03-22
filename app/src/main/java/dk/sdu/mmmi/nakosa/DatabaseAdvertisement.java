@@ -5,6 +5,7 @@ package dk.sdu.mmmi.nakosa;
  */
 
 public class DatabaseAdvertisement {
+    private String key;
     public String Product;
     public String Description;
     public String Seller;
@@ -13,6 +14,14 @@ public class DatabaseAdvertisement {
     public String ImageDownloadPath;
 
     public DatabaseAdvertisement() {
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }
 

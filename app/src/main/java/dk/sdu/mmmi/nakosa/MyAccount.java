@@ -2,7 +2,7 @@ package dk.sdu.mmmi.nakosa;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +37,7 @@ public class MyAccount extends Fragment {
         v = inflater.inflate(R.layout.fragment_my_account, container, false);
         datas = new ArrayList<>();
 
-        String name = userData.getFirstName() + " " + userData.getLastName();
+        String name = userData.getName();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Advertisements");
         Query query = databaseReference.orderByChild("Seller").equalTo(name);
 
@@ -57,7 +57,7 @@ public class MyAccount extends Fragment {
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(v.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         return v;
@@ -66,6 +66,7 @@ public class MyAccount extends Fragment {
     private void createCards(DataSnapshot dataSnapshot) {
         for(DataSnapshot snap : dataSnapshot.getChildren()) {
             AdvertisementData ad = new AdvertisementData();
+            ad.setKey(snap.getKey());
             ad.setProductName(snap.child("Product").getValue().toString());
             ad.setDescription(snap.child("Description").getValue().toString());
             ad.setSeller(snap.child("Seller").getValue().toString());
