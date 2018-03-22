@@ -3,7 +3,7 @@
     <string name="title_activity_advertisement" translatable="false">AdvertisementActivity</string>
     <string name="facebook_app_id" translatable="false">149144665772623</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb149144665772623</string>
-    <string name="menu_account">Min konto</string>
+    <string name="menu_account">Mine annoncer</string>
     <string name="menu_settings">Indstillinger</string>
     <string name="menu_home">Annoncer</string>
     <string name="in_app_title" translatable="false">Nakosa</string>

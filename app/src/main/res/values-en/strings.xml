@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Nakosa</string>
-    <string name="menu_account">My Account</string>
+    <string name="menu_account">My ads</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_home">Home Feed</string>
     <string name="welcome_text">Welcome</string>
