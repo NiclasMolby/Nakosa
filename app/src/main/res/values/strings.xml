@@ -1,5 +1,24 @@
 <resources>
     <string name="app_name">Nakosa</string>
-    <string name="facebook_app_id">149144665772623</string>
-    <string name="fb_login_protocol_scheme">fb149144665772623</string>
+    <string name="title_activity_advertisement" translatable="false">AdvertisementActivity</string>
+    <string name="facebook_app_id" translatable="false">149144665772623</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb149144665772623</string>
+    <string name="menu_account">Mine annoncer</string>
+    <string name="menu_settings">Indstillinger</string>
+    <string name="menu_home">Annoncer</string>
+    <string name="in_app_title" translatable="false">Nakosa</string>
+    <string name="view_ad_seller">Sælger:</string>
+    <string name="view_ad_price">Pris:</string>
+    <string name="view_ad_description">Beskrivelse:</string>
+    <string name="new_ad_product">Produkt</string>
+    <string name="new_ad_price">Pris</string>
+    <string name="new_ad_description">Produkt beskrivelse</string>
+    <string name="new_ad_add_image">Tilføj billede</string>
+    <string name="new_ad_create">Opret annonce</string>
+    <string name="uploading_overlay">Uploading annonce...</string>
+    <string name="welcome_text">Velkommen</string>
+    <string name="delete_ad">Slet annonce!</string>
+    <string name="logout_title">Log ud</string>
+    <string name="logout_summary">Tryk her for at logge ud</string>
+    <string name="login_description">Hvis Facebook login ikke virker, klik på knappen bypass</string>
 </resources>

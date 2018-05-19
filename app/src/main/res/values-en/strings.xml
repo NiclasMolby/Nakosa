@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nakosa</string>
+    <string name="menu_account">My ads</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_home">Home Feed</string>
+    <string name="welcome_text">Welcome</string>
+    <string name="uploading_overlay">Uploading ad...</string>
+    <string name="new_ad_create">Create ad</string>
+    <string name="new_ad_add_image">Add image</string>
+    <string name="new_ad_description">Product description</string>
+    <string name="new_ad_price">price</string>
+    <string name="view_ad_price">Price:</string>
+    <string name="view_ad_seller">Seller:</string>
+    <string name="view_ad_description">Description:</string>
+    <string name="new_ad_product">Product</string>
+    <string name="delete_ad">Delete ad</string>
+    <string name="logout_title">Log Out</string>
+    <string name="logout_summary">Press here to log out</string>
+    <string name="login_description">If Facebook login does not work, please press the bypass</string>
+</resources>
