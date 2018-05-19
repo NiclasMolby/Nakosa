@@ -20,4 +20,5 @@
     <string name="delete_ad">Slet annonce!</string>
     <string name="logout_title">Log ud</string>
     <string name="logout_summary">Tryk her for at logge ud</string>
+    <string name="login_description">Hvis Facebook login ikke virker, klik på knappen bypass</string>
 </resources>
