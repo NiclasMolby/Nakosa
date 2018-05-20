@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "138374781963",
+    "firebase_url": "https://nakosa-a0eed.firebaseio.com",
+    "project_id": "nakosa-a0eed",
+    "storage_bucket": "nakosa-a0eed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138374781963:android:be53aaf211766675",
+        "android_client_info": {
+          "package_name": "dk.sdu.mmmi.nakosa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138374781963-pa51jegenjss48ql74frgc5d0gqk097p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.sdu.mmmi.nakosa",
+            "certificate_hash": "a91233bdc0a722ee5dc0acef7ac96121beff881d"
+          }
+        },
+        {
+          "client_id": "138374781963-dfulr7f7ck9vp3fcsdambd2jdtdbal77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU7ttoP7blLV5tsyjPlR2-GqTVGyV5ewY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138374781963-dfulr7f7ck9vp3fcsdambd2jdtdbal77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
